@@ -1,0 +1,28 @@
+import numpy as np
+ 
+def qr(A):
+    m, n = A.shape
+    Q = np.eye(m)
+    for i in range(n - (m == n)):
+        H = np.eye(m)
+        H[i:, i:] = TEMPFONK(A[i:, i])
+        Q = np.dot(Q, H)
+        A = np.dot(H, A)
+    return Q, A
+ 
+def TEMPFONK(a):
+    v = a / (a[0] + np.copysign(np.linalg.norm(a), a[0]))
+    v[0] = 1
+    H = np.eye(a.shape[0])
+    H -= (2 / np.dot(v, v)) * np.dot(v[:, None], v[None, :])
+    return H
+
+a = np.array(((
+    ( 1, 1, 0),
+    ( 1, 0, 1),
+    ( 0, 1, 1),
+)))
+ 
+q, r = qr(a)
+print('q:\n', q)
+print('r:\n', r)
